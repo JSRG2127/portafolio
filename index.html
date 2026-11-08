@@ -347,6 +347,13 @@ body.cc-on,body.cc-on a,body.cc-on button,body.cc-on [data-cursor]{cursor:none}
               </sc-for>
             </div>
           </sc-if>
+          <sc-if value="{{ pm.motion }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;justify-content:space-between;font-family:'Bricolage Grotesque',sans-serif;font-weight:300;font-size:12px;letter-spacing:.08em;color:#8c8c8c;padding-top:12px"><span>MOTION GRAPHICS WITH CLAUDE</span><span>VIDEO</span></div>
+            <figure style="margin:0;display:flex;flex-direction:column;gap:10px">
+              <video src="{{ pm.motion }}" controls="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" aria-label="Motion graphics de Junto" style="width:100%;max-height:70vh;background:#000;border:1px solid #222;display:block"></video>
+              <figcaption style="font-family:'Bricolage Grotesque',sans-serif;font-weight:300;font-size:12px;letter-spacing:.08em;color:#8c8c8c">VIDEO · MOTION GRAPHICS WITH CLAUDE</figcaption>
+            </figure>
+          </sc-if>
           <sc-if value="{{ pm.hasSprites }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;justify-content:space-between;font-family:'Bricolage Grotesque',sans-serif;font-weight:300;font-size:12px;letter-spacing:.08em;color:#8c8c8c;padding-top:12px"><span>SPRITES · PIXEL ART</span><span>{{ pm.spriteCount }}</span></div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px">
@@ -524,9 +531,10 @@ class Component extends DCLogic {
         cover: 'assets/ascent/ascent-portada.png', coverPos: 'center', coverSize: 'contain', coverBg: '#0b0b10', label: 'VIDEOJUEGO',
         gallery: [['assets/ascent/ascent-portada.png', '918/510', 'PANTALLA DE INICIO — ASCENT ZERO']],
         sprites: [['assets/ascent/sprite-personaje.png', '44%', 'PERSONAJE'], ['assets/ascent/sprite-torii.png', '60%', 'TORII'], ['assets/ascent/sprite-letrero.png', '60%', 'LETRERO']] },
-      { idx: '002', status: 'EN PROCESO', type: 'MVP DE APP', name: 'JUNTO', desc: 'Aplicación para creación de eventos o planes universitarios.', tags: ['UX/UI', 'PROTOTIPADO', 'WIREFRAMES', 'FIGMA'], shot: 'captura de Junto',
-        cover: 'assets/junto/junto-portada.png', coverPos: 'center', coverSize: 'cover', coverBg: '#f4f3f1', label: 'APLICACIÓN MÓVIL · WIREFRAMES',
-        gallery: [['assets/junto/junto-portada.png', '1600/900', 'PORTADA — JUNTO']],
+      { idx: '002', status: 'EN PROCESO', type: 'MVP DE APP', name: 'JUNTO', desc: 'Aplicación para creación de eventos o planes universitarios.', tags: ['UX/UI', 'PROTOTIPADO', 'WIREFRAMES', 'FIGMA', 'MOTION GRAPHICS WITH CLAUDE'], shot: 'captura de Junto',
+        cover: 'assets/junto/junto-portada-principal.png', coverPos: 'center', coverSize: 'cover', coverBg: '#ffffff', label: 'APLICACIÓN MÓVIL · WIREFRAMES',
+        gallery: [['assets/junto/junto-portada-principal.png', '1339/746', 'PORTADA — JUNTO']],
+        motion: 'assets/junto/junto-motion.mp4',
         screens: [['assets/junto/junto-bienvenida.png', '308/633', 'BIENVENIDA'], ['assets/junto/junto-inicio.png', '307/630', 'INICIO'], ['assets/junto/junto-plan.png', '312/634', 'DETALLE DEL PLAN'], ['assets/junto/junto-calificacion.png', '316/645', 'CALIFICACIÓN']],
         hifi: [['assets/junto/hifi-registro.png', '355/753', 'REGISTRO'], ['assets/junto/hifi-verificacion.png', '375/768', 'VERIFICACIÓN — PASO 2'], ['assets/junto/hifi-perfil.png', '360/756', 'PERFIL — PASO 3'], ['assets/junto/hifi-inicio.png', '373/779', 'INICIO'], ['assets/junto/hifi-feed.png', '374/780', 'HOY EN EL CAMPUS'], ['assets/junto/hifi-ya-casi.png', '378/773', 'YA CASI'], ['assets/junto/hifi-calificacion.png', '372/758', 'CALIFICACIÓN']] },
       { idx: '003', type: 'APLICACIÓN · UX/UI', name: 'CRONOS', desc: 'Aplicación de optimización y organización de tiempo.', tags: ['UX/UI', 'PROTOTIPADO', 'WIREFRAMING', 'FIGMA'], shot: 'captura de Cronos',
@@ -568,7 +576,7 @@ class Component extends DCLogic {
         enter: () => this.setState({ hovT: i }), leave: () => this.setState({ hovT: -1 }) };
     });
     const pm0 = st.openP >= 0 ? P[st.openP] : P[0];
-    const pm = { ...pm0, hasGallery: !!pm0.gallery, noGallery: !pm0.gallery, video: pm0.video || '',
+    const pm = { ...pm0, hasGallery: !!pm0.gallery, noGallery: !pm0.gallery, video: pm0.video || '', motion: pm0.motion || '',
       hasStatus: !!pm0.status, status: pm0.status || '', hasUnused: !!pm0.unused, hasScreens: !!pm0.screens,
       galleryLabel: pm0.label || (pm0.screens ? 'APLICACIÓN MÓVIL' : 'DISEÑO WEB'),
       galleryCount: pm0.gallery ? (n => n + (n === 1 ? ' PANTALLA' : ' PANTALLAS'))(pm0.gallery.length + (pm0.screens ? pm0.screens.length : 0)) : '',
@@ -609,7 +617,6 @@ class Component extends DCLogic {
       studies: [{ t: 'Creación Digital', s: 'Estudiante — en curso', y: '2025 —' }],
       links: [
         { k: 'EMAIL', v: email, href: 'mailto:' + email, icon: '↗', click: () => {} },
-        { k: 'GITHUB', v: 'github.com/JSRG2127', href: 'https://github.com/JSRG2127', icon: '↗', click: () => {} },
         { k: 'DISCORD', v: 'souluck', href: '#contacto', icon: st.copied ? 'COPIADO ✓' : 'COPIAR', click: e => { e.preventDefault(); navigator.clipboard && navigator.clipboard.writeText('souluck'); this.setState({ copied: true }); clearTimeout(this.cpT); this.cpT = setTimeout(() => this.setState({ copied: false }), 1800); } }
       ],
       email, hud: (this.props.showHud ?? true) && !st.mob,
